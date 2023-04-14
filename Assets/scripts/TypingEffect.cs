@@ -15,7 +15,7 @@ public class TypingEffect : MonoBehaviour
 
     IEnumerator _typing()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         for (int i = 0; i <= text.Length; i++)
         {
             foreach (Text t in tx)

@@ -8,6 +8,7 @@ public class DragNDrop : MonoBehaviour
     GameObject atStart;
     GameObject atEnd;
     string onEnd;
+    public Animator anim;
     private void Start()
     {
         
@@ -15,11 +16,12 @@ public class DragNDrop : MonoBehaviour
 
     private void OnMouseDown()
     {
+        anim.SetBool("onHold", true);
     }
 
     private void OnMouseDrag()
     {
-        Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y+0.5f);
         Vector2 worldObjPos = Camera.main.ScreenToWorldPoint(mousePos);
 
         transform.position = worldObjPos;
@@ -27,5 +29,10 @@ public class DragNDrop : MonoBehaviour
 
     private void OnMouseUp()
     {
+        anim.SetBool("onHold", false);
+        Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        Vector2 worldObjPos = Camera.main.ScreenToWorldPoint(mousePos);
+
+        transform.position = worldObjPos;
     }
 }

@@ -50,6 +50,12 @@ TagManager:
   - name: object
     uniqueID: 3077605623
     locked: 0
+  - name: area
+    uniqueID: 1267370851
+    locked: 0
+  - name: player
+    uniqueID: 34267079
+    locked: 0
   - name: UI
     uniqueID: 2793522101
     locked: 0
