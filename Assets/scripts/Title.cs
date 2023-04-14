@@ -10,7 +10,6 @@ public class Title : MonoBehaviour
 
     public void LoadGame()
     {
-        Debug.Log("pressed");
-        SceneManager.LoadScene(SceneToLoad);
+        LoadingController.LoadScene(SceneToLoad);
     }
 }

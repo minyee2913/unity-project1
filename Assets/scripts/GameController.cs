@@ -11,29 +11,28 @@ public class GameController : MonoBehaviour
     public GameObject subtitle;
     public GameObject score;
 
-    private Material cameraMaterial;
     private Text titleText;
     private Text subText;
     private Text scoreText;
     private Text conditionText;
     private bool started = false;
+    private NonDestroyData data;
+    private MusicManager musicManager;
 
     public int gameScore = 0;
-    public float activingCool = 0;
-    public int[] activeTypes = { 0 };
-    public int leastBlock = 10;
 
-    void Start()//(3.5, 3)
+    void Start()
     {
         titleText = title.GetComponent<Text>();
         subText = subtitle.GetComponent<Text>();
         scoreText = score.GetComponent<Text>();
         conditionText = GameObject.Find("condition").GetComponent<Text>();
-        cameraMaterial = new Material(Shader.Find("Custom/Grayscale"));
+        data = GameObject.Find("nonDestroyData").GetComponent<NonDestroyData>();
+        musicManager = GameObject.Find(data.stageMusic).GetComponent<MusicManager>();
 
         titleText.text = "";
         subText.text = "";
-        conditionText.text = string.Format("Á¶°Ç:\n¶¥ {0}Ä­ ÀÌ»ó º¸È£", leastBlock);
+        conditionText.text = string.Format("Á¶°Ç:\n¶¥ {0}Ä­ ÀÌ»ó º¸È£", data.leastBlock);
 
         StartCoroutine(StartCool());
     }
@@ -51,6 +50,9 @@ public class GameController : MonoBehaviour
 
         titleText.text = "½ÃÀÛ!";
         subText.text = "";
+
+        musicManager.Play();
+
         yield return new WaitForSeconds(1f);
 
         titleText.text = "";
@@ -70,50 +72,60 @@ public class GameController : MonoBehaviour
             if (areas.Length > 0)
             {
                 int i = UnityEngine.Random.Range(0, areas.Length);
-                int type = UnityEngine.Random.Range(0, activeTypes.Length);
+                int type = UnityEngine.Random.Range(0, data.activeTypes.Length);
 
                 AreaManage manage = areas[i].GetComponent<AreaManage>();
                 manage.activate = true;
                 manage.activeType = type;
             }
 
-            yield return new WaitForSeconds(activingCool);
+            yield return new WaitForSeconds(data.activeDelay);
 
         }
     }
 
     private void FixedUpdate()
     {
+        if (!started) return;
+        if (gameScore < 0) gameScore = 0;
         if (scoreText) scoreText.text = string.Format("Á¡¼ö: {0}", gameScore);
 
         GameObject[] areas = Array.FindAll(area, element => element.GetComponent<AreaManage>().disposed != true);
-        if (areas.Length < leastBlock)
+        if (areas.Length < data.leastBlock)
         {
             StartCoroutine(GameOver());
         }
     }
 
-    public void FixGround(Vector2 pos)
+    public bool FixGround(Vector2 pos)
     {
-        GameObject area_ = Array.Find(area, element => element.GetComponent<AreaManage>().pos.Equals(pos));
+        GameObject area_ = Array.Find(area, element => element.GetComponent<AreaManage>().pos.Equals(pos) && element.GetComponent<AreaManage>().disposed != true);
 
         AreaManage areaManage = area_.GetComponent<AreaManage>();
-        if (!areaManage.activate) return;
+        if (!areaManage.activate) return false;
         
         gameScore += Convert.ToInt32(Math.Floor((1f - areaManage.poision) * 1000));
         areaManage.poision = 0;
         areaManage.activate = false;
+
+        return true;
     }
 
     IEnumerator GameOver()
     {
         started = false;
-        subText.text = "GAME OVER";
-        subText.color = Color.magenta;
-        cameraMaterial.SetFloat("_Grayscale", 1);
-
         StopCoroutine(ActivingArea());
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
+
+        titleText.text = "GAME OVER";
+        titleText.color = Color.red;
+
+        subText.text = "score " + gameScore;
+        subText.color = Color.yellow;
+
+        yield return new WaitForSeconds(3.5f);
+
+        LoadingController.LoadScene("Menu");
     }
 }

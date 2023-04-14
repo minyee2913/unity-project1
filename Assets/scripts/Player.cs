@@ -7,10 +7,15 @@ public class Player : MonoBehaviour
     private SpriteRenderer Renderer;
     private GameController Controller;
 
+    private AudioSource click;
+    private AudioSource check;
+
     private void Start()
     {
         Renderer = GetComponent<SpriteRenderer>();
         Controller = GameObject.Find("GameController").GetComponent<GameController>();
+        click = GameObject.Find("click").GetComponent<AudioSource>();
+        check = GameObject.Find("check").GetComponent<AudioSource>();
     }
     public void MoveUp()
     {
@@ -19,6 +24,8 @@ public class Player : MonoBehaviour
 
         pos.y += 1;
         transform.position = pos;
+
+        click.Play();
     }
 
     public void MoveDown()
@@ -28,6 +35,8 @@ public class Player : MonoBehaviour
 
         pos.y -= 1;
         transform.position = pos;
+
+        click.Play();
     }
 
     public void MoveLeft()
@@ -38,6 +47,8 @@ public class Player : MonoBehaviour
         Renderer.flipX = true;
         pos.x -= 1;
         transform.position = pos;
+
+        click.Play();
     }
 
     public void MoveRight()
@@ -48,12 +59,17 @@ public class Player : MonoBehaviour
         Renderer.flipX = false;
         pos.x += 1;
         transform.position = pos;
+
+        click.Play();
     }
 
     public void FixGround()
     {
         Vector2 pos = new Vector2(transform.position.x + 3.5f, transform.position.y + 3f);
 
-        Controller.FixGround(pos);
+        bool fix = Controller.FixGround(pos);
+
+        if (fix) check.Play();
+        else click.Play();
     }
 }
