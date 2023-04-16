@@ -213,8 +213,15 @@ public class GameController : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        titleText.text = "GAME OVER";
-        titleText.color = Color.red;
+        if (setTime > 0)
+        {
+            titleText.text = "GAME OVER";
+            titleText.color = Color.red;
+        } else
+        {
+            titleText.text = "TIME OVER";
+            titleText.color = Color.white;
+        }
 
         subText.text = "score " + gameScore;
         subText.color = Color.yellow;

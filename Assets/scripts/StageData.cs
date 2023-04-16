@@ -23,7 +23,7 @@ public class StageData : MonoBehaviour
                 2,
                 "minigame",
                 0,
-                3,
+                2.5f,
                 10,
                 types
             );
@@ -45,7 +45,7 @@ public class StageData : MonoBehaviour
                 4,
                 "icyCave",
                 0,
-                3,
+                1.5f,
                 10,
                 types
             );
@@ -56,7 +56,7 @@ public class StageData : MonoBehaviour
                 5,
                 "unknown",
                 0,
-                1.5f,
+                1f,
                 10,
                 types
             );

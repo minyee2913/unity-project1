@@ -37,11 +37,10 @@ public class AreaManage : MonoBehaviour
         if (type == 1)
         {
             StartCoroutine(Type2());
-            return delay + 0.5f;
         } else if (type == 2)
         {
             StartCoroutine(Type3());
-            return delay + 1.6f;
+            return delay + 0.5f;
         }
 
 
@@ -87,7 +86,7 @@ public class AreaManage : MonoBehaviour
 
     IEnumerator Type3()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         while (gameController.paused)
         {
             yield return new WaitForSeconds(1f);
@@ -116,7 +115,7 @@ public class AreaManage : MonoBehaviour
             if (area != null)
             {
                 AreaManage manage = area.GetComponent<AreaManage>();
-                manage.poision = poision + 0.1f;
+                manage.poision = poision + 0.07f;
                 manage.type3Data = did;
                 manage.Activating(0, 2);
 
@@ -159,7 +158,7 @@ public class AreaManage : MonoBehaviour
         else {
             if (activate)
             {
-                if (activeType == 0) poision += 0.003f;
+                if (activeType == 0) poision += 0.006f;
             }
 
 
