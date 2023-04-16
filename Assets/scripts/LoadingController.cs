@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class LoadingController : MonoBehaviour
 {
     static string nextScene;
+    public GameObject[] images;
 
     [SerializeField]
     Image progress;
@@ -19,6 +20,8 @@ public class LoadingController : MonoBehaviour
 
     private void Start()
     {
+        int rd = Random.Range(0, images.Length);
+        images[rd].SetActive(true);
         StartCoroutine(SceneProcess());
     }
 

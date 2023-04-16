@@ -26,7 +26,7 @@ public void Play()
 
             while (true)
             {
-                yield return new WaitForSeconds(0.1f);
+                yield return null;
                 if (!Audio.isPlaying)
                 {
                     Audio.clip = sounds[1];

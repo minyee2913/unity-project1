@@ -7,7 +7,7 @@ public class NonDestroyData : MonoBehaviour
     public int stage;
     public string stageMusic;
     public int stageTheme;
-    public int activeDelay;
+    public float activeDelay;
     public int leastBlock;
     public int[] activeTypes;
 

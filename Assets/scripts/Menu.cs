@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
@@ -97,18 +100,36 @@ public class Menu : MonoBehaviour
         LoadingController.LoadScene(gameplayScene);
     }
 
-    public void Stage1()
+    public void Stage()
     {
         if (!isPlay) return;
 
-        int[] types = { 0 };
-        NonDestroyData data = GameObject.Find("nonDestroyData").GetComponent<NonDestroyData>();
-        data.stage = 1;
-        data.stageMusic = "Prepare for Battle";
-        data.stageTheme = 0;
-        data.activeDelay = 1;
-        data.leastBlock = 10;
-        data.activeTypes = types;
+        GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
+        int stage = int.Parse(clickedButton.GetComponentInChildren<Text>().text);
+
+        if (stage == 1)
+        {
+            int[] types = { 0 };
+            NonDestroyData data = GameObject.Find("nonDestroyData").GetComponent<NonDestroyData>();
+            data.stage = 1;
+            data.stageMusic = "Prepare for Battle";
+            data.stageTheme = 0;
+            data.activeDelay = 3;
+            data.leastBlock = 8;
+            data.activeTypes = types;
+        }
+
+        if (stage == 2)
+        {
+            int[] types = { 0, 1 };
+            NonDestroyData data = GameObject.Find("nonDestroyData").GetComponent<NonDestroyData>();
+            data.stage = 2;
+            data.stageMusic = "minigame";
+            data.stageTheme = 0;
+            data.activeDelay = 3;
+            data.leastBlock = 10;
+            data.activeTypes = types;
+        }
 
         LoadStage();
     }
