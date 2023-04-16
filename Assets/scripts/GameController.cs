@@ -1,7 +1,6 @@
 using Cinemachine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +11,10 @@ public class GameController : MonoBehaviour
     public GameObject subtitle;
     public GameObject score;
     public CinemachineVirtualCamera virtualCamera;
+    public GameObject Player;
+
+    public GameObject pause;
+    public GameObject ingame;
 
     private Text titleText;
     private Text subText;
@@ -22,12 +25,13 @@ public class GameController : MonoBehaviour
     private MusicManager musicManager;
     private AudioSource countSound;
     private AudioSource overSound;
+    private GameObject pauseButton;
 
     public bool started = false;
     public bool paused = false;
     public bool overtime = false;
 
-    public float setTime = 180;
+    public float setTime = 160;
     public int gameScore = 0;
 
     void Start()
@@ -38,14 +42,17 @@ public class GameController : MonoBehaviour
         conditionText = GameObject.Find("condition").GetComponent<Text>();
         timerText = GameObject.Find("timer").GetComponent<Text>();
         data = GameObject.Find("nonDestroyData").GetComponent<NonDestroyData>();
-        musicManager = GameObject.Find(data.stageMusic).GetComponent<MusicManager>();
+        musicManager = GameObject.Find(data.stage.stageMusic).GetComponent<MusicManager>();
         countSound = GameObject.Find("count").GetComponent<AudioSource>();
         overSound = GameObject.Find("overNotific").GetComponent<AudioSource>();
         virtualCamera = GameObject.Find("vcam1").GetComponent<CinemachineVirtualCamera>();
+        pauseButton = GameObject.Find("pauseButton");
 
         titleText.text = "";
         subText.text = "";
-        conditionText.text = string.Format("조건:\n땅 {0}칸 이상 보호", data.leastBlock);
+        conditionText.text = string.Format("조건:\n땅 {0}칸 이상 보호", data.stage.leastBlock);
+        pause.SetActive(false);
+        pauseButton.SetActive(false);
 
         StartCoroutine(StartCool());
     }
@@ -54,7 +61,7 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         int coolTime = 3;
-        while(coolTime > 0) {
+        while (coolTime > 0) {
             subText.text = coolTime.ToString();
             countSound.Play();
             coolTime--;
@@ -65,6 +72,7 @@ public class GameController : MonoBehaviour
         titleText.text = "시작!";
         subText.text = "";
 
+        pauseButton.SetActive(true);
         musicManager.Play();
 
         yield return new WaitForSeconds(1f);
@@ -78,22 +86,24 @@ public class GameController : MonoBehaviour
 
     IEnumerator ActivingArea()
     {
-        while(started && !paused)
+        while (started)
         {
-
-            GameObject[] areas = Array.FindAll(area, element => element.GetComponent<AreaManage>().disposed != true && element.GetComponent<AreaManage>().activate != true);
-            
-            if (areas.Length > 0)
+            float waitDelay = data.stage.activeDelay;
+            if (!paused)
             {
-                int i = UnityEngine.Random.Range(0, areas.Length);
-                int type = UnityEngine.Random.Range(0, data.activeTypes.Length);
+                GameObject[] areas = Array.FindAll(area, element => element.GetComponent<AreaManage>().disposed != true && element.GetComponent<AreaManage>().activate != true);
 
-                AreaManage manage = areas[i].GetComponent<AreaManage>();
-                manage.activate = true;
-                manage.activeType = type;
+                if (areas.Length > 0)
+                {
+                    int i = UnityEngine.Random.Range(0, areas.Length);
+                    int type = UnityEngine.Random.Range(0, data.stage.activeTypes.Length);
+
+                    AreaManage manage = areas[i].GetComponent<AreaManage>();
+                    waitDelay = manage.Activating(data.stage.activeDelay, data.stage.activeTypes[type]);
+                }
             }
 
-            yield return new WaitForSeconds(data.activeDelay);
+            yield return new WaitForSeconds(waitDelay);
 
         }
     }
@@ -108,7 +118,7 @@ public class GameController : MonoBehaviour
             if (!overtime && setTime <= 60)
             {
                 overtime = true;
-                data.activeDelay /= 2f;
+                data.stage.activeDelay /= 2f;
                 StartCoroutine(OnOverTime());
             }
 
@@ -139,12 +149,12 @@ public class GameController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!started && paused) return;
+        if (!started || paused) return;
         if (gameScore < 0) gameScore = 0;
         if (scoreText) scoreText.text = string.Format("점수: {0}", gameScore);
 
         GameObject[] areas = Array.FindAll(area, element => element.GetComponent<AreaManage>().disposed != true);
-        if (areas.Length < data.leastBlock)
+        if (areas.Length < data.stage.leastBlock)
         {
             StartCoroutine(GameOver());
         }
@@ -157,7 +167,7 @@ public class GameController : MonoBehaviour
 
         AreaManage areaManage = area_.GetComponent<AreaManage>();
         if (!areaManage.activate) return false;
-        
+
         gameScore += Convert.ToInt32(Math.Floor((1f - areaManage.poision) * 200));
         areaManage.poision = 0;
         areaManage.activate = false;
@@ -165,9 +175,35 @@ public class GameController : MonoBehaviour
         return true;
     }
 
-    void Pause()
+    public void Pause()
     {
+        paused = true;
+        pause.SetActive(true);
+        ingame.SetActive(false);
 
+        Vector2 pos = Player.transform.position;
+
+        virtualCamera.transform.position = new Vector3(pos.x, pos.y, virtualCamera.transform.position.z);
+        virtualCamera.m_Lens.Dutch = -30;
+        virtualCamera.m_Lens.OrthographicSize = 1.5f;
+
+        GameObject.Find("pauseText").GetComponent<Text>().text = "현재 점수: " + gameScore + "\n남은 시간: " + (int)setTime + "s";
+    }
+
+    public void Continue()
+    {
+        paused = false;
+        pause.SetActive(false);
+        ingame.SetActive(true);
+        virtualCamera.transform.position = new Vector3(0, 0, virtualCamera.transform.position.z);
+
+        virtualCamera.m_Lens.Dutch = 0;
+        virtualCamera.m_Lens.OrthographicSize = 2.6f;
+    }
+
+    public void Exit()
+    {
+        LoadingController.LoadScene("Menu");
     }
 
     IEnumerator GameOver()

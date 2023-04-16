@@ -20,6 +20,10 @@ public class LoadingController : MonoBehaviour
 
     private void Start()
     {
+        for (int i = 0;  i < images.Length; i++)
+        {
+            images[i].SetActive(false);
+        }
         int rd = Random.Range(0, images.Length);
         images[rd].SetActive(true);
         StartCoroutine(SceneProcess());

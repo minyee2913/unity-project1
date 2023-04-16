@@ -1,14 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
     public CinemachineCameraOffset camOffset;
+    public StageData stageData;
 
     public bool isPlay = false;
     Vector2 playTargetPos = new Vector2(5.5f, 2);
@@ -26,6 +24,7 @@ public class Menu : MonoBehaviour
     {
         camOffset = GameObject.Find("vcam").GetComponent<CinemachineCameraOffset>();
         player = GameObject.Find("player");
+        stageData = GameObject.Find("stageData").GetComponent<StageData>();
     }
 
     public void OnPlay()
@@ -105,31 +104,11 @@ public class Menu : MonoBehaviour
         if (!isPlay) return;
 
         GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
-        int stage = int.Parse(clickedButton.GetComponentInChildren<Text>().text);
+        int st = int.Parse(clickedButton.GetComponentInChildren<Text>().text) - 1;
 
-        if (stage == 1)
-        {
-            int[] types = { 0 };
-            NonDestroyData data = GameObject.Find("nonDestroyData").GetComponent<NonDestroyData>();
-            data.stage = 1;
-            data.stageMusic = "Prepare for Battle";
-            data.stageTheme = 0;
-            data.activeDelay = 3;
-            data.leastBlock = 8;
-            data.activeTypes = types;
-        }
-
-        if (stage == 2)
-        {
-            int[] types = { 0, 1 };
-            NonDestroyData data = GameObject.Find("nonDestroyData").GetComponent<NonDestroyData>();
-            data.stage = 2;
-            data.stageMusic = "minigame";
-            data.stageTheme = 0;
-            data.activeDelay = 3;
-            data.leastBlock = 10;
-            data.activeTypes = types;
-        }
+        NonDestroyData data = GameObject.Find("nonDestroyData").GetComponent<NonDestroyData>();
+        Stage stage = stageData.stages[st];
+        data.stage = stage;
 
         LoadStage();
     }

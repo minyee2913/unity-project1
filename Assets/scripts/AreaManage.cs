@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class AreaManage : MonoBehaviour
 {
@@ -16,6 +14,7 @@ public class AreaManage : MonoBehaviour
     private GameController gameController;
 
     public Vector2 pos;
+    public int type3Data = 0;
     void Start()
     {
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
@@ -29,6 +28,24 @@ public class AreaManage : MonoBehaviour
         pos = new Vector2(Int32.Parse(name[0]), Int32.Parse(name[1]));
 
         Renderer.color = color;
+    }
+
+    public float Activating(float delay, int type) {
+        activate = true;
+        activeType = type;
+
+        if (type == 1)
+        {
+            StartCoroutine(Type2());
+            return delay + 0.5f;
+        } else if (type == 2)
+        {
+            StartCoroutine(Type3());
+            return delay + 1.6f;
+        }
+
+
+        return delay;
     }
 
     IEnumerator Type2()
@@ -63,18 +80,76 @@ public class AreaManage : MonoBehaviour
 
         while (gameController.started && activate)
         {
-            poision += 0.25f;
+            if (!gameController.paused) poision += 0.25f;
             yield return new WaitForSeconds(0.7f);
+        }
+    }
+
+    IEnumerator Type3()
+    {
+        yield return new WaitForSeconds(0.5f);
+        while (gameController.paused)
+        {
+            yield return new WaitForSeconds(1f);
+        }
+
+        bool false1 = false;
+        bool false2 = false;
+        bool false3 = false;
+        bool false4 = false;
+        int did = type3Data;
+        Vector2 pos_ = new Vector2(pos.x + 1, pos.y);
+        while (true)
+        {
+            if (did == 0) pos_ = new Vector2(pos.x + 1, pos.y);
+            else if (did == 1) pos_ = new Vector2(pos.x - 1, pos.y);
+            else if (did == 2) pos_ = new Vector2(pos.x, pos.y + 1);
+            else if (did == 3) pos_ = new Vector2(pos.x, pos.y - 1);
+            else
+            {
+                did = 0;
+            }
+
+            if (!activate) break;
+            if (disposed) break;
+            GameObject area = Array.Find(gameController.area, element => element.GetComponent<AreaManage>().pos.Equals(pos_) && element.GetComponent<AreaManage>().disposed != true && element.GetComponent<AreaManage>().activate != true);
+            if (area != null)
+            {
+                AreaManage manage = area.GetComponent<AreaManage>();
+                manage.poision = poision + 0.1f;
+                manage.type3Data = did;
+                manage.Activating(0, 2);
+
+                poision = 0;
+                activate = false;
+                disposed = false;
+                break;
+            } else
+            {
+                if (did == 0) false1 = true;
+                else if (did == 1) false2 = true;
+                else if (did == 2) false3 = true;
+                else if (did == 3) false4 = true;
+            }
+
+            if (false1 && false2 && false3 && false4)
+            {
+                activeType = 0;
+                break;
+            }
+
+            did++;
         }
     }
 
     private void FixedUpdate()
     {
-        if (!gameController.started) return;
+        if (!gameController.started || gameController.paused) return;
 
         if (disposed)
         {
             if (activeType == 1) StopCoroutine(Type2());
+            if (activeType == 2) StopCoroutine(Type3());
             Color color = Renderer.color;
             color.a = 0.6f;
             color.r = 0.1f;
@@ -85,7 +160,6 @@ public class AreaManage : MonoBehaviour
             if (activate)
             {
                 if (activeType == 0) poision += 0.003f;
-                if (activeType == 1 && poision == 0) StartCoroutine(Type2());
             }
 
 
