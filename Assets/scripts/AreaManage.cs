@@ -15,6 +15,7 @@ public class AreaManage : MonoBehaviour
 
     public Vector2 pos;
     public int type3Data = 0;
+    int boss = 0;
     void Start()
     {
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
@@ -31,6 +32,11 @@ public class AreaManage : MonoBehaviour
     }
 
     public float Activating(float delay, int type) {
+        if (type == 10)
+        {
+            StartCoroutine(BossType1());
+            return -1;
+        }
         activate = true;
         activeType = type;
 
@@ -45,6 +51,58 @@ public class AreaManage : MonoBehaviour
 
 
         return delay;
+    }
+
+    IEnumerator BossType1()
+    {
+        int wave = 0;
+        while (gameController.started)
+        {
+            if (!gameController.paused)
+            {
+                if (wave == 0)
+                {
+                    int tick = 0;
+
+                    GameObject[] areas = Array.FindAll(gameController.area, element => element.GetComponent<AreaManage>().pos.x == tick);
+
+                    for (int i = 0; i < areas.Length; i++)
+                    {
+                        areas[i].GetComponent<AreaManage>().Activating(0, 0);
+                    }
+
+                    for (int i = 0; i < 8; i++) {
+                        yield return new WaitForSeconds(0.4f);
+
+                        for (int j = 0; j < areas.Length; j++)
+                        {
+                            AreaManage manage = areas[j].GetComponent<AreaManage>();
+                            if (manage.activate && !manage.disposed) {
+                                GameObject Object = Array.Find(gameController.area, element=> element.GetComponent<AreaManage>().pos.Equals(new Vector2(tick + 1, manage.pos.y)));
+                                if (Object != null)
+                                {
+                                    areas[j] = Object;
+                                    AreaManage manage2 = Object.GetComponent<AreaManage>();
+                                    manage2.Activating(0, 0);
+                                    manage.activate = false;
+                                    manage.poision = 0;
+
+                                } else
+                                {
+                                    manage.poision = 0.8f;
+                                }
+                            }
+                        }
+
+                        tick++;
+                    }
+
+                    yield return new WaitForSeconds(1.5f);
+                }
+                wave++;
+            }
+            yield return null;
+        }
     }
 
     IEnumerator Type2()

@@ -1,6 +1,8 @@
 using Cinemachine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -86,6 +88,7 @@ public class GameController : MonoBehaviour
 
     IEnumerator ActivingArea()
     {
+        int before = 0;
         while (started)
         {
             float waitDelay = data.stage.activeDelay;
@@ -95,7 +98,8 @@ public class GameController : MonoBehaviour
 
                 if (areas.Length > 0)
                 {
-                    int i = UnityEngine.Random.Range(0, areas.Length);
+                    int i = GenerateRandomNumber(0, areas.Length, before);
+
                     int type = UnityEngine.Random.Range(0, data.stage.activeTypes.Length);
 
                     AreaManage manage = areas[i].GetComponent<AreaManage>();
@@ -103,9 +107,20 @@ public class GameController : MonoBehaviour
                 }
             }
 
+            if (waitDelay == -1) break;
             yield return new WaitForSeconds(waitDelay);
 
         }
+    }
+
+    private int GenerateRandomNumber(int min, int max, int not)
+    {
+        int randomValue = UnityEngine.Random.Range(min, max);
+        while (not == randomValue)
+        {
+            randomValue = UnityEngine.Random.Range(min, max);
+        }
+        return randomValue;
     }
 
     private void Update()

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class StageData : MonoBehaviour
 {
-    public Stage[] stages = new Stage[5];
+    public Stage[] stages = new Stage[6];
 
     private void Start()
     {
@@ -54,6 +54,17 @@ public class StageData : MonoBehaviour
             int[] types = { 0, 1, 2 };
             stages[4] = new Stage(
                 5,
+                "unknown",
+                0,
+                1f,
+                10,
+                types
+            );
+        }
+        {
+            int[] types = { 10 };
+            stages[5] = new Stage(
+                6,
                 "unknown",
                 0,
                 1f,
