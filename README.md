@@ -1,3 +1,4 @@
 # unity-project1
 
-T H E  S C H O O L  P R O J E C T
+나의 첫 유니티 게임
+학교 발표용 + 재밌어서 계속 만들꼬임
