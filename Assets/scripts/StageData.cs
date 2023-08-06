@@ -35,7 +35,7 @@ public class StageData : MonoBehaviour
                 "journey",
                 0,
                 2,
-                10,
+                12,
                 types
             );
         }
@@ -46,7 +46,7 @@ public class StageData : MonoBehaviour
                 "icyCave",
                 0,
                 1.5f,
-                10,
+                14,
                 types
             );
         }
@@ -57,7 +57,7 @@ public class StageData : MonoBehaviour
                 "unknown",
                 0,
                 1f,
-                10,
+                16,
                 types
             );
         }
@@ -65,10 +65,10 @@ public class StageData : MonoBehaviour
             int[] types = { 10 };
             stages[5] = new Stage(
                 6,
-                "unknown",
-                0,
+                "boss",
+                1,
                 1f,
-                10,
+                20,
                 types
             );
         }

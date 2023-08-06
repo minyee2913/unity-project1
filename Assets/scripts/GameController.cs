@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class GameController : MonoBehaviour
 {
@@ -14,47 +15,56 @@ public class GameController : MonoBehaviour
     public GameObject score;
     public CinemachineVirtualCamera virtualCamera;
     public GameObject Player;
+    public GameObject DisposeParticle;
 
-    public GameObject pause;
+    public GameObject pause_;
+    PauseController pause;
     public GameObject ingame;
 
-    private Text titleText;
-    private Text subText;
+    public Text titleText;
+    public Text subText;
     private Text scoreText;
     private Text conditionText;
     private Text timerText;
     private NonDestroyData data;
-    private MusicManager musicManager;
+    public MusicManager musicManager;
     private AudioSource countSound;
-    private AudioSource overSound;
-    private GameObject pauseButton;
+    public AudioSource overSound;
+    public UnityEngine.UIElements.Button pauseButton;
+    public float camScale = 2.6f;
 
     public bool started = false;
     public bool paused = false;
     public bool overtime = false;
 
     public float setTime = 160;
-    public int gameScore = 0;
+    public int gameScore = 3000;
 
     void Start()
     {
+        var root = GameObject.Find("UI").GetComponent<UIDocument>().rootVisualElement;
+
         titleText = title.GetComponent<Text>();
         subText = subtitle.GetComponent<Text>();
         scoreText = score.GetComponent<Text>();
         conditionText = GameObject.Find("condition").GetComponent<Text>();
         timerText = GameObject.Find("timer").GetComponent<Text>();
+
         data = GameObject.Find("nonDestroyData").GetComponent<NonDestroyData>();
-        musicManager = GameObject.Find(data.stage.stageMusic).GetComponent<MusicManager>();
+        if (data.stage.stageMusic != null) musicManager = GameObject.Find(data.stage.stageMusic).GetComponent<MusicManager>();
+
         countSound = GameObject.Find("count").GetComponent<AudioSource>();
         overSound = GameObject.Find("overNotific").GetComponent<AudioSource>();
         virtualCamera = GameObject.Find("vcam1").GetComponent<CinemachineVirtualCamera>();
-        pauseButton = GameObject.Find("pauseButton");
+        pauseButton = root.Q<UnityEngine.UIElements.Button>();
 
         titleText.text = "";
         subText.text = "";
         conditionText.text = string.Format("조건:\n땅 {0}칸 이상 보호", data.stage.leastBlock);
-        pause.SetActive(false);
-        pauseButton.SetActive(false);
+
+        pause = pause_.GetComponent<PauseController>();
+        pauseButton.style.display = DisplayStyle.None;
+        pauseButton.RegisterCallback<ClickEvent>(Pause);
 
         StartCoroutine(StartCool());
     }
@@ -74,8 +84,8 @@ public class GameController : MonoBehaviour
         titleText.text = "시작!";
         subText.text = "";
 
-        pauseButton.SetActive(true);
-        musicManager.Play();
+        pauseButton.style.display = DisplayStyle.Flex;
+        if (musicManager != null) musicManager.Play();
 
         yield return new WaitForSeconds(1f);
 
@@ -190,10 +200,10 @@ public class GameController : MonoBehaviour
         return true;
     }
 
-    public void Pause()
+    public void Pause(ClickEvent ev)
     {
         paused = true;
-        pause.SetActive(true);
+        pause.Openpause(ev);
         ingame.SetActive(false);
 
         Vector2 pos = Player.transform.position;
@@ -205,18 +215,18 @@ public class GameController : MonoBehaviour
         GameObject.Find("pauseText").GetComponent<Text>().text = "현재 점수: " + gameScore + "\n남은 시간: " + (int)setTime + "s";
     }
 
-    public void Continue()
+    public void Continue(ClickEvent ev)
     {
         paused = false;
-        pause.SetActive(false);
+        pause.Closepause(ev);
         ingame.SetActive(true);
         virtualCamera.transform.position = new Vector3(0, 0, virtualCamera.transform.position.z);
 
         virtualCamera.m_Lens.Dutch = 0;
-        virtualCamera.m_Lens.OrthographicSize = 2.6f;
+        virtualCamera.m_Lens.OrthographicSize = camScale;
     }
 
-    public void Exit()
+    public void Exit(ClickEvent ev)
     {
         LoadingController.LoadScene("Menu");
     }

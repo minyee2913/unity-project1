@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Uss/default.uss?fileID=7433441132597879392&amp;guid=be8b267b9fa566c4e9fce15cc47e7d44&amp;type=3#default" />
+    <ui:VisualElement name="pause_base" class="setting_base">
+        <ui:VisualElement name="pause_main" class="setting_panel setting_panel-up" style="top: 1027px; right: 154px; left: 198px; bottom: -742px; width: 85%; height: 85%; flex-direction: row;">
+            <ui:Label text="일시정지" display-tooltip-when-elided="true" enable-rich-text="true" name="title" style="left: 920px; top: 5px; width: 0; height: 0; right: 10px; bottom: 0; -unity-font-style: normal; -unity-font: url(&apos;project://database/Assets/font/pixelroborobo.otf?fileID=12800000&amp;guid=e515d4b4eb6b7e146a9906f41d96adb0&amp;type=3#pixelroborobo&apos;); font-size: 120px; -unity-text-align: upper-center; -unity-font-definition: initial; flex-direction: row; background-color: rgb(70, 70, 70); color: rgb(43, 43, 43); position: absolute;" />
+            <ui:VisualElement style="width: 30%; height: 15%; flex-direction: column; left: 101px; top: -239px; right: 0; bottom: 0;">
+                <ui:Button text="계속하기" display-tooltip-when-elided="true" name="resume_button" class="button_green" style="left: 0; top: 0; height: 152px; width: 372px; font-size: 45px;" />
+                <ui:Button text="포기하기" display-tooltip-when-elided="true" name="exit" class="button_red" style="height: 160px; width: 362px; font-size: 45px;" />
+                <ui:Button text="설정" display-tooltip-when-elided="true" name="setting" class="button_white" style="height: 160px; width: 362px; font-size: 45px;" />
+            </ui:VisualElement>
+            <ui:Label text="현재 점수: 0&#10;남은 시간: 0s" display-tooltip-when-elided="true" name="pauseText" style="left: 95px; top: 11px; font-size: 50px; color: rgb(255, 255, 255); height: 549px; width: 796px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

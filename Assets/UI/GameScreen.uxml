@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Uss/default.uss?fileID=7433441132597879392&amp;guid=be8b267b9fa566c4e9fce15cc47e7d44&amp;type=3#default" />
+    <ui:Button text="||" display-tooltip-when-elided="true" name="pause_button" class="button_white" style="position: absolute; top: 7px; left: 1814px; height: 85px; width: 91px; font-size: 60px; -unity-font-definition: initial; -unity-font: url(&apos;project://database/Assets/font/pixelroborobo.otf?fileID=12800000&amp;guid=e515d4b4eb6b7e146a9906f41d96adb0&amp;type=3#pixelroborobo&apos;);" />
+</ui:UXML>

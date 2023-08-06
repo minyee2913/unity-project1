@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class AreaManage : MonoBehaviour
 {
     public bool activate = false;
     public bool disposed = false;
+    public bool force = false;
     public int activeType = 0;
     public float poision = 0f;
 
@@ -15,7 +18,6 @@ public class AreaManage : MonoBehaviour
 
     public Vector2 pos;
     public int type3Data = 0;
-    int boss = 0;
     void Start()
     {
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
@@ -56,8 +58,42 @@ public class AreaManage : MonoBehaviour
     IEnumerator BossType1()
     {
         int wave = 0;
+        int clearI = 0;
+        Text bossT = GameObject.Find("bossMessage").GetComponent<Text>();
+        GameObject[] prefabs = GameObject.Find("prefabGroups").GetComponent<PrefabGroup>().prefab;
+
+        GameObject boss = Instantiate(Array.Find(prefabs, element => element.name == "the_boss"));
+
+        boss.transform.position = new Vector2(0, 0);
+
+        //gameController.musicManager = GameObject.Find("").GetComponent<MusicManager>();
+        gameController.pauseButton.style.display = DisplayStyle.None;
+        gameController.virtualCamera.GetComponent<CinemachineCameraOffset>().m_Offset.y = 0.5f;
+
+        for (float i = 2.6f; i <= 3.8f; i += 0.1f)
+        {
+            gameController.virtualCamera.m_Lens.OrthographicSize = i;
+            yield return new WaitForSeconds(0.05f);
+        }
+        gameController.camScale = 3.8f;
+
+        yield return new WaitForSeconds(1f);
+
+        for (float i = 0; i < 4; i+=0.5f)
+        {
+            boss.transform.position = new Vector2(0, i);
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        gameController.pauseButton.style.display = DisplayStyle.Flex;
+
+        int isOver = 1;
+
         while (gameController.started)
         {
+            if (gameController.overtime) isOver = 2;
             if (!gameController.paused)
             {
                 if (wave == 0)
@@ -72,20 +108,23 @@ public class AreaManage : MonoBehaviour
                     }
 
                     for (int i = 0; i < 8; i++) {
-                        yield return new WaitForSeconds(0.4f);
+                        yield return new WaitForSeconds(0.4f/isOver);
 
                         for (int j = 0; j < areas.Length; j++)
                         {
                             AreaManage manage = areas[j].GetComponent<AreaManage>();
-                            if (manage.activate && !manage.disposed) {
+                            if (manage.activate) {
                                 GameObject Object = Array.Find(gameController.area, element=> element.GetComponent<AreaManage>().pos.Equals(new Vector2(tick + 1, manage.pos.y)));
                                 if (Object != null)
                                 {
                                     areas[j] = Object;
                                     AreaManage manage2 = Object.GetComponent<AreaManage>();
-                                    manage2.Activating(0, 0);
-                                    manage.activate = false;
-                                    manage.poision = 0;
+                                    if (!manage2.disposed)
+                                    {
+                                        manage2.Activating(0, 0);
+                                        manage.activate = false;
+                                        manage.poision = 0;
+                                    }
 
                                 } else
                                 {
@@ -97,10 +136,85 @@ public class AreaManage : MonoBehaviour
                         tick++;
                     }
 
-                    yield return new WaitForSeconds(1.5f);
+
+
+                    yield return new WaitForSeconds(1.5f / isOver);
+                }
+
+                if (wave == 1)
+                {
+                    Vector2 vec = new Vector2();
+                    for (int i = 1; i <= 4; i++)
+                    {
+                        if (i <= 2) vec.x = 1;
+                        else vec.x = 6;
+                        if (i % 2 == 0) vec.y = 2;
+                        else vec.y = 4;
+
+                        GameObject Object = Array.Find(gameController.area, element => element.GetComponent<AreaManage>().pos.Equals(vec));
+                        if (Object != null)
+                        {
+                            AreaManage manage = Object.GetComponent<AreaManage>();
+                            manage.Activating(0, 1);
+                        }
+
+                        yield return new WaitForSeconds(1f / isOver);
+                    }
+                }
+                if (wave >= 2 && wave <= 3)
+                {
+                    GameObject[] areas = Array.FindAll(gameController.area, element => element.GetComponent<AreaManage>().disposed != true && element.GetComponent<AreaManage>().activate != true);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        int rd = UnityEngine.Random.Range(0, areas.Length);
+                        areas[rd].GetComponent<AreaManage>().Activating(0, 0);
+                    }
+
+                    yield return new WaitForSeconds(1.5f / isOver);
+                }
+
+                if (wave == 4)
+                {
+                    GameObject[] areas = Array.FindAll(gameController.area, element => element.GetComponent<AreaManage>().disposed != true && element.GetComponent<AreaManage>().activate != true);
+                    for (int i = 0; i < 2; i++)
+                    {
+                        int rd = UnityEngine.Random.Range(0, areas.Length);
+                        areas[rd].GetComponent<AreaManage>().Activating(0, 2);
+                    }
+
+                    yield return new WaitForSeconds(1.5f / isOver);
+                }
+
+                if (wave == 5)
+                {
+                    yield return new WaitForSeconds(0.5f);
+                    GameObject[] areas = Array.FindAll(gameController.area, element => element.GetComponent<AreaManage>().disposed == true);
+                    if (areas.Length > 0 && clearI >= 3)
+                    {
+                        clearI = 0;
+                        for (int i = 0; i < areas.Length;i++)
+                        {
+                            AreaManage area = areas[i].GetComponent<AreaManage>();
+                            area.force = true;
+                            area.activate = false;
+                            area.poision = 0;
+                            area.disposed = false;
+                            gameController.gameScore -= 40;
+                            
+                        }
+                        bossT.text = "그녀는 오염된 토양을 억지로 사용했습니다!\r\n\n해당 토양의 오염속도가 증가합니다.";
+                        gameController.overSound.Play();
+
+                        yield return new WaitForSeconds(1.6f);
+                        bossT.text = "";
+                        clearI = -1;
+                    }
+                    clearI++;
+
                 }
                 wave++;
             }
+            if (wave > 5) wave = 0;
             yield return null;
         }
     }
@@ -209,6 +323,8 @@ public class AreaManage : MonoBehaviour
             if (activeType == 2) StopCoroutine(Type3());
             Color color = Renderer.color;
             color.a = 0.6f;
+            color.b = 0;
+            color.g = 0;
             color.r = 0.1f;
 
             Renderer.color = color;
@@ -216,11 +332,16 @@ public class AreaManage : MonoBehaviour
         else {
             if (activate)
             {
-                if (activeType == 0) poision += 0.006f;
+                if (activeType == 0)
+                {
+                    if (force) poision += 0.007f;
+                    else poision += 0.004f;
+                }
             }
 
 
             Color color = Renderer.color;
+            if (force) color = Color.yellow;
             color.a = poision / 100f * 80f;
 
             Renderer.color = color;
@@ -229,6 +350,8 @@ public class AreaManage : MonoBehaviour
             {
                 disposed = true;
                 disposeSound.Play();
+                GameObject particle = Instantiate(gameController.DisposeParticle, transform.position, transform.rotation);
+                Destroy(particle, 0.5f);
 
                 gameController.gameScore -= 80;
                 if (gameController.gameScore < 0) gameController.gameScore = 0;

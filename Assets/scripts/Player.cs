@@ -9,8 +9,10 @@ public class Player : MonoBehaviour
 
     private AudioSource click;
     private AudioSource check;
+    public GameObject FixParticle;
+    public GameObject[] FixEffect;
 
-    private void Start()
+    private void Start() 
     {
         Renderer = GetComponent<SpriteRenderer>();
         Controller = GameObject.Find("GameController").GetComponent<GameController>();
@@ -69,7 +71,14 @@ public class Player : MonoBehaviour
 
         bool fix = Controller.FixGround(pos);
 
-        if (fix) check.Play();
+        if (fix)
+        {
+            var pt = FixEffect[Random.Range(0, FixEffect.Length-1)];
+            GameObject particle = Instantiate(FixParticle, transform.position, transform.rotation);
+            Instantiate(pt, new Vector2(transform.position.x, transform.position.y - 0.3f), transform.rotation);
+            Destroy(particle, 0.5f);
+            check.Play();
+        }
         else click.Play();
     }
 }

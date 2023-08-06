@@ -1,0 +1,275 @@
+.button_orange {
+    align-items: stretch;
+    width: 300px;
+    height: 120px;
+    -unity-font-style: normal;
+    font-size: 35px;
+    background-image: url('project://database/Assets/textures/ui/button.png?fileID=2800000&guid=3606da6c10316a34cba0533e945e917b&type=3#button');
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    justify-content: flex-start;
+    -unity-background-image-tint-color: rgb(255, 223, 107);
+    transition-duration: 0s;
+    transition-timing-function: ease;
+}
+
+.button_orange:hover {
+    scale: 1.05 1.05;
+    top: -3px;
+    -unity-background-image-tint-color: rgb(255, 239, 182);
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in-out-elastic;
+}
+
+.button_orange:active {
+    -unity-background-image-tint-color: rgb(137, 121, 63);
+}
+
+.button_red {
+    align-items: stretch;
+    width: 300px;
+    height: 120px;
+    -unity-font-style: normal;
+    font-size: 35px;
+    background-image: url('project://database/Assets/textures/ui/button.png?fileID=2800000&guid=3606da6c10316a34cba0533e945e917b&type=3#button');
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    justify-content: flex-start;
+    -unity-background-image-tint-color: rgb(250, 88, 86);
+}
+
+.button_red:hover {
+    scale: 1.05 1.05;
+    top: -3px;
+    -unity-background-image-tint-color: rgb(245, 151, 149);
+    transition-timing-function: ease-in-out-elastic;
+    transition-duration: 0.1s;
+}
+
+.button_red:active {
+    -unity-background-image-tint-color: rgb(142, 61, 60);
+}
+
+.button_white {
+    align-items: stretch;
+    width: 300px;
+    height: 120px;
+    -unity-font-style: normal;
+    font-size: 35px;
+    background-image: url('project://database/Assets/textures/ui/button.png?fileID=2800000&guid=3606da6c10316a34cba0533e945e917b&type=3#button');
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    justify-content: flex-start;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    transition-duration: 0s;
+    transition-timing-function: ease;
+}
+
+.button_white:hover {
+    scale: 1.05 1.05;
+    top: -3px;
+    -unity-background-image-tint-color: rgb(178, 178, 178);
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in-out-elastic;
+}
+
+.button:active {
+    -unity-background-image-tint-color: rgb(101, 101, 101);
+}
+
+.close_button {
+    position: absolute;
+    left: 1662px;
+    top: 84px;
+    height: 75px;
+    width: 102px;
+    font-size: 60px;
+    color: rgb(55, 55, 55);
+    background-color: rgba(120, 116, 116, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.close_button:hover {
+    transition-timing-function: ease-in-out-elastic;
+    transition-duration: 0.1s;
+    scale: 1.2 1.2;
+}
+
+.close_button:active {
+    color: rgb(255, 255, 255);
+}
+
+.play_button {
+    position: absolute;
+    top: -8px;
+    left: 1414px;
+    height: 193px;
+    width: 498px;
+    background-image: url('project://database/Assets/textures/ui/start_button.png?fileID=2800000&guid=d41835494ad2ca84fab9545e1f6eeec3&type=3#start_button');
+    background-color: rgba(188, 188, 188, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    font-size: 70px;
+    color: rgb(255, 255, 255);
+}
+
+.play_button:hover {
+    transition-timing-function: ease-in-out-elastic;
+    transition-duration: 0.1s;
+    translate: -82px 0;
+    width: 580px;
+    transform-origin: right top;
+    scale: 1.05 1.05;
+    color: rgb(255, 246, 107);
+    -unity-background-image-tint-color: rgb(255, 236, 215);
+}
+
+.play_button:active {
+    -unity-background-image-tint-color: rgb(108, 108, 108);
+}
+
+.setting_panel {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 100%;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+    background-image: url('project://database/Assets/textures/ui/form.png?fileID=2800000&guid=27c7335a879f5b74fad7437a8abc4ca9&type=3#form');
+    justify-content: flex-start;
+    align-items: center;
+    -unity-font-definition: initial;
+    -unity-font: url('project://database/Assets/font/pixelroborobo.otf?fileID=12800000&guid=e515d4b4eb6b7e146a9906f41d96adb0&type=3#pixelroborobo');
+    translate: 0 0;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-sine;
+}
+
+.setting_panel-up {
+    translate: 0 -100%;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-cubic;
+    transition-delay: 0s;
+}
+
+.setting_base {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.22);
+    display: none;
+    transition-property: all;
+    transition-duration: 0.5s;
+    opacity: 0;
+}
+
+.setting_base_fade {
+    opacity: 1;
+}
+
+.return_button {
+    position: absolute;
+    top: -8px;
+    left: 1414px;
+    height: 193px;
+    width: 506px;
+    background-image: url('project://database/Assets/textures/ui/return_button.png?fileID=2800000&guid=5f1449a553704184a86e6dd2d72b6b3d&type=3#return_button');
+    background-color: rgba(188, 188, 188, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    font-size: 70px;
+    color: rgb(255, 255, 255);
+}
+
+.return_button:hover {
+    transition-timing-function: ease-in-out-elastic;
+    transition-duration: 0.1s;
+    translate: 0 0;
+    width: 580px;
+    transform-origin: left top;
+    scale: 1.05 1.05;
+    color: rgb(107, 131, 255);
+    -unity-background-image-tint-color: rgb(215, 255, 240);
+}
+
+.return_button:active {
+    -unity-background-image-tint-color: rgb(108, 108, 108);
+}
+
+.info_balloon:hover {
+    background-image: url('project://database/Assets/textures/ui/info_balloon.png?fileID=2800000&guid=b117c28d08440584198e448aa01d4470&type=3#info_balloon');
+    width: 486px;
+    height: 184px;
+    position: absolute;
+    left: 120px;
+    top: 742px;
+    opacity: 1;
+    transition-property: all;
+    transition-duration: 0.05s;
+    transition-timing-function: ease-in-out-bounce;
+    translate: 1px 1px;
+    scale: 1.02 1.02;
+}
+
+.info_balloon {
+    background-image: url('project://database/Assets/textures/ui/info_balloon.png?fileID=2800000&guid=b117c28d08440584198e448aa01d4470&type=3#info_balloon');
+    width: 486px;
+    height: 184px;
+    position: absolute;
+    left: 120px;
+    top: 742px;
+    opacity: 0;
+    translate: -10px 0;
+}
+
+.button_green {
+    align-items: stretch;
+    width: 300px;
+    height: 120px;
+    -unity-font-style: normal;
+    font-size: 35px;
+    background-image: url('project://database/Assets/textures/ui/button.png?fileID=2800000&guid=3606da6c10316a34cba0533e945e917b&type=3#button');
+    -unity-background-scale-mode: stretch-to-fill;
+    background-color: rgba(255, 255, 255, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    justify-content: flex-start;
+    -unity-background-image-tint-color: rgb(93, 231, 122);
+    transition-duration: 0s;
+    transition-timing-function: ease;
+}
+
+.button_green:hover {
+    scale: 1.05 1.05;
+    top: -3px;
+    -unity-background-image-tint-color: rgb(152, 243, 171);
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in-out-elastic;
+}
+
+.button_green:active {
+    -unity-background-image-tint-color: rgb(65, 140, 81);
+}

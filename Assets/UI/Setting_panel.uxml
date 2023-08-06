@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Uss/default.uss?fileID=7433441132597879392&amp;guid=be8b267b9fa566c4e9fce15cc47e7d44&amp;type=3#default" />
+    <ui:VisualElement name="setting_base" class="setting_base" style="display: flex;">
+        <ui:VisualElement name="setting_main" class="setting_panel">
+            <ui:Label text="설정" display-tooltip-when-elided="true" enable-rich-text="true" name="title" style="left: 0; top: 0; width: 0; height: 0; right: 10px; bottom: 0; -unity-font-style: normal; -unity-font: url(&apos;project://database/Assets/font/pixelroborobo.otf?fileID=12800000&amp;guid=e515d4b4eb6b7e146a9906f41d96adb0&amp;type=3#pixelroborobo&apos;); font-size: 120px; -unity-text-align: upper-center; -unity-font-definition: initial; flex-direction: row;">
+                <ui:Label text="설정" display-tooltip-when-elided="true" enable-rich-text="true" style="left: -15px; top: -15px; width: 0; height: 0; right: 0; bottom: 0; -unity-font-style: normal; -unity-font: url(&apos;project://database/Assets/font/pixelroborobo.otf?fileID=12800000&amp;guid=e515d4b4eb6b7e146a9906f41d96adb0&amp;type=3#pixelroborobo&apos;); font-size: 120px; -unity-text-align: upper-center; -unity-font-definition: initial; color: rgb(255, 255, 255);" />
+            </ui:Label>
+            <ui:ScrollView name="settingScroll" elasticity="0.1" style="width: 90%; height: 70%; left: 0; top: 5%; right: 0; bottom: 0;">
+                <ui:SliderInt label="배경음악 크기" value="100" high-value="100" name="bgmVol" low-value="0" page-size="0" show-input-field="false" direction="Horizontal" inverted="false" usage-hints="None" focusable="false" style="scale: 2.2 2.2; transform-origin: left; translate: 30px 120px; width: 700px; height: 30px; font-size: 20px;" />
+            </ui:ScrollView>
+            <ui:VisualElement style="width: 90%; height: 15%; flex-direction: row; left: 0; top: 60px; right: 0; bottom: 0;">
+                <ui:Button text="설정 저장" display-tooltip-when-elided="true" name="save_button" class="button_orange" style="left: 0; top: 0; height: 152px; width: 372px;" />
+                <ui:Button text="설정 초기화" display-tooltip-when-elided="true" class="button_red" style="height: 160px; width: 362px;" />
+            </ui:VisualElement>
+            <ui:Button text="X" display-tooltip-when-elided="true" name="setting_close" class="close_button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
